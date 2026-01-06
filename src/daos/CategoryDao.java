@@ -122,6 +122,34 @@ public class CategoryDao implements IDao<Category> {
 		}
 		return categories;
 	}
+	
+	/**
+	 * Alternative method to be tested : use read method to read all
+	 * SELECT all records query
+	 * @return ArrayList of found records
+	 */
+//	public ArrayList<Category> readAll() {
+//		ArrayList<Category> categories = new ArrayList<Category>();
+//		ResultSet result = null;
+//		DBConnexion dbConnection = new DBConnexion();
+//		String sql = "SELECT id FROM category";
+//		try {
+//			Connection  connection = dbConnection.ConnectDB();
+//			PreparedStatement ps = connection.prepareStatement(sql);
+//			result = ps.executeQuery(sql);
+//			while(result.next()) {
+//				// Creating a new Category to avoid reference problems
+//				this.category = new Category();
+//				this.category.setId(result.getInt(("id")));
+//				categories.add(this.read());
+//			}
+//			ps.close();
+//			connection.close();
+//		} catch (SQLException e) {
+//			e.printStackTrace();
+//		}
+//		return categories;
+//	}
 
 	/**
 	 * UPDATE one record query
