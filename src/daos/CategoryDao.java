@@ -12,7 +12,7 @@ import models.Category;
 /**
  * Class to make operations on DB for Category class
  */
-public class CategoryDao implements IDao {
+public class CategoryDao implements IDao<Category> {
 	private Category category;
 
 	/**
@@ -21,13 +21,17 @@ public class CategoryDao implements IDao {
 	public CategoryDao() {
 		this.category = new Category(); 
 	}
-	
+
+	/**
+	 * Constructor with all parameters
+	 * @param category Category to initialize
+	 */
 	public CategoryDao(Category category) {
 		this.category = category; 
 	}
-	
 
 	/**
+	 * Get category
 	 * @return the category
 	 */
 	public Category getCategory() {
@@ -35,37 +39,67 @@ public class CategoryDao implements IDao {
 	}
 
 	/**
+	 * Set category
 	 * @param category the category to set
 	 */
 	public void setCategory(Category category) {
 		this.category = category;
 	}
 
+	/**
+	 * INSERT one record query
+	 * @return whether the query is successful or not
+	 */
 	@Override
 	public boolean create() {
-		
+		String sql = "INSERT INTO category ('id', 'name') VALUES(NULL, ?)";
+		DBConnexion dbConnection = new DBConnexion();
+		try{
+			Connection  connection = dbConnection.ConnectDB();
+			PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+			ps.setString(1, this.getCategory().getName());
+			if(ps.executeUpdate() == 1) {
+				ResultSet rs = ps.getGeneratedKeys();
+				if(rs.next()) {
+					this.getCategory().setId(rs.getInt("id"));
+					return true;
+				}
+			}
+			ps.close();
+		}catch (SQLException e) {
+			e.printStackTrace();
+			return false;
+		}
 		return false;
 	}
-	
+
+	/**
+	 * SELECT one record query
+	 * @return Select query result
+	 */
 	@Override
-	public ResultSet read() {
+	public Category read() {
 		ResultSet result = null;
 		DBConnexion dbConnection = new DBConnexion();
+		String sql = "SELECT * FROM category WHERE category.id = ?";
 		try {
 			Connection  connection = dbConnection.ConnectDB();
-			Statement stmt = connection.createStatement();
-			result = stmt.executeQuery("SELECT * FROM category WHERE category.id = " + this.getCategory());
-			stmt.close();
-			connection.close();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, this.getCategory().getId());
+			result = ps.executeQuery(sql);
+			while(result.next()) {
+				this.category = new Category(result.getInt(("id")), result.getString(("name")));
+			}
+			ps.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-		return result;
+		return this.getCategory();
 	}
-	
+
 	/**
-	 * Read all categories from database
-	 * @return
+	 * SELECT all records query
+	 * @return ArrayList of found records
 	 */
 	public ArrayList<Category> readAll() {
 		ArrayList<Category> categories = new ArrayList<Category>();
@@ -89,9 +123,12 @@ public class CategoryDao implements IDao {
 		return categories;
 	}
 
+	/**
+	 * UPDATE one record query
+	 * @return whether the query is successful or not
+	 */
 	@Override
 	public boolean update() {
-		// Requête UPDATE
 		String sql = "UPDATE category SET name = ? WHERE id = ?";
 		DBConnexion dbConnection = new DBConnexion();
 		try{
@@ -110,9 +147,12 @@ public class CategoryDao implements IDao {
 		return false;
 	}
 
+	/**
+	 * DELETE one record query
+	 * @return whether the query is successful or not
+	 */
 	@Override
 	public boolean delete() {
-		// Requête DELETE
 		String sql = "DELETE FROM category WHERE id = ?";
 		DBConnexion dbConnection = new DBConnexion();
 		try{
@@ -129,5 +169,4 @@ public class CategoryDao implements IDao {
 		}
 		return false;
 	}
-
 }
