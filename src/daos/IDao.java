@@ -1,33 +1,31 @@
 package daos;
 
-import java.sql.ResultSet;
-
 /**
  * Interface IDao
  */
-public interface IDao {
+public interface IDao<T> {
 	
 	/**
 	 * Create record in database
-	 * @return
+	 * @return whether the query is successful or not
 	 */
 	public boolean create();
 	
 	/**
 	 * Read one record
-	 * @return
+	 * @return whether the query is successful or not
 	 */
-	public ResultSet read();
+	public T read();
 	
 	/**
 	 * Update one record
-	 * @return
+	 * @return whether the query is successful or not
 	 */
 	public boolean update();
 	
 	/**
 	 * Delete one record
-	 * @return
+	 * @return whether the query is successful or not
 	 */
 	public boolean delete();
 }
