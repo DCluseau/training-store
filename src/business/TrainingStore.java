@@ -88,18 +88,24 @@ public class TrainingStore {
 	 * @return
 	 */
 	public void displayCategoriesMenu() {
-		Scanner sc = new Scanner(System.in);
-		int numOption = 0;
 		String menu = "Quelles catégories voulez-vous afficher ? : \n";
 		for(String option : this.getCategoriesMenu()) {
 			menu += option + "\n";
 		}
 		System.out.println(menu);
-		numOption = sc.nextInt();
-		sc.close();
 	}
 	
 	public void displayTrainingsByCategories(int id) {
+		Scanner sc = new Scanner(System.in);
+		int numOption = 0;
+		try {
+			numOption = sc.nextInt();
+			TrainingDao trainingDao = new TrainingDao();
+			trainingDao.readTrainingsByCategory(numOption);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		sc.close();
 		
 	}
 	
