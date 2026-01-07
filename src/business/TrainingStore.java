@@ -31,7 +31,7 @@ public class TrainingStore {
 		CategoryDao categoryDao = new CategoryDao();
 		categoryDao.readAll();
 		for(Category category : categoryDao.readAll()) {
-			this.categoriesMenu.add(category.getName());
+			this.categoriesMenu.add(category.getId() + " - " + category.getName());
 		}
 	}
 	
@@ -88,11 +88,19 @@ public class TrainingStore {
 	 * @return
 	 */
 	public void displayCategoriesMenu() {
+		Scanner sc = new Scanner(System.in);
+		int numOption = 0;
 		String menu = "Quelles catégories voulez-vous afficher ? : \n";
-		for(String option : this.getMainMenu()) {
+		for(String option : this.getCategoriesMenu()) {
 			menu += option + "\n";
 		}
 		System.out.println(menu);
+		numOption = sc.nextInt();
+		sc.close();
+	}
+	
+	public void displayTrainingsByCategories(int id) {
+		
 	}
 	
 	/**
@@ -135,6 +143,10 @@ public class TrainingStore {
 		
 	}
 	
+	/**
+	 * 
+	 * @return
+	 */
 	public ArrayList<Training> getAllTrainings(){
 		ArrayList<Training> allTrainings = new ArrayList<Training>();
 		TrainingDao trainingDao = new TrainingDao();
@@ -142,28 +154,46 @@ public class TrainingStore {
 		return allTrainings;
 	}
 	
+	public void searchTrainings(String tags) {
+		ArrayList<Training> trainingsFound = new ArrayList<Training>();
+		TrainingDao trainingDao = new TrainingDao();
+		trainingsFound = new ArrayList<Training>(trainingDao.search(tags));
+		displayTrainingList(trainingsFound);
+	}
+	
+	/**
+	 * 
+	 * @param menu
+	 */
 	public void selectOption(String menu) {
 		Scanner scan = new Scanner(System.in);
 		int select = 0;
 		if(menu.equals("main")) {
 			try {
-				System.out.println("Veuillez saisir une option (entrez le numéro de l'option) : ");
-				select = scan.nextInt();
-				switch(select) {
-				case 1:
-					this.displayTrainingList(this.getAllTrainings());
-					break;
-				case 2:
-					this.displayCategoriesMenu();
-					break;
-				case 3:
-					break;
-				case 4:
-					System.exit(1);
-					break;
-				default:
+				while(select != 4) {
+					System.out.println("Veuillez saisir une option (entrez le numéro de l'option) : ");
+					select = scan.nextInt();
+					switch(select) {
+					case 1:
+						this.displayTrainingList(this.getAllTrainings());
+						break;
+					case 2:
+						this.displayCategoriesMenu();
+						break;
+					case 3:
+						String tags = "";
+						System.out.println("Veuillez saisir vos mots-clés en remplaçant les espaces par un +");
+						tags = scan.next();
+						this.searchTrainings(tags);
+						break;
+					case 4:
+						System.exit(1);
+						break;
+					default:
+						break;
+					}
+					select = 0;
 					this.displayMainMenu();
-					break;
 				}
 			}catch (Exception e) {
 				scan.close();
