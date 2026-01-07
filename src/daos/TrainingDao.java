@@ -13,7 +13,7 @@ import models.Training;
 /**
  * Class to acces database for training table and class
  */
-public class TrainingDao implements IDao {
+public class TrainingDao implements IDao<Training> {
 	private Training training;
 	
 	/**
@@ -184,7 +184,6 @@ public class TrainingDao implements IDao {
 	 * @return whether the query is successful or not
 	 */
 	public boolean updateCategories() {
-		CategoryDao categoryDao = new CategoryDao();
 		String sql = "SELECT * FROM is_category WHERE id_training = ? and id_category = ?";
 		DBConnexion dbConnection = new DBConnexion();
 		if(this.getTraining().getCategories().size() == 1) {
@@ -243,5 +242,13 @@ public class TrainingDao implements IDao {
 			return false;
 		}
 		return false;
+	}
+	
+	public ArrayList<Training> search(String tags){
+		ArrayList<Training> recordsFound = new ArrayList<Training>();
+		
+		
+		
+		return recordsFound;
 	}
 }
