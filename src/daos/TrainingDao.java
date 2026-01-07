@@ -103,17 +103,18 @@ public class TrainingDao implements IDao<Training> {
 	public ArrayList<Category> readCategories(){
 		ArrayList<Category> categories = new ArrayList<Category>();
 		ResultSet result = null;
-		Category category = new Category();
+		
 		DBConnexion dbConnection = new DBConnexion();
-		String sql = "SELECT id_training FROM is_category WHERE id_training = ?";
+		String sql = "SELECT id_category FROM is_category WHERE id_training = ?";
 		try {
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setInt(1, this.getTraining().getId());
-			result = ps.executeQuery(sql);
+			result = ps.executeQuery();
 			while(result.next()) {
 				// Creating a new object to avoid reference problems
-				category.setId(result.getInt("id"));
+				Category category = new Category();
+				category.setId(result.getInt("id_category"));
 				CategoryDao categoryDao = new CategoryDao(category);
 				categories.add(categoryDao.read());
 			}
@@ -137,7 +138,7 @@ public class TrainingDao implements IDao<Training> {
 		try {
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);
-			result = ps.executeQuery(sql);
+			result = ps.executeQuery();
 			while(result.next()) {
 				// Creating a new object to avoid reference problems
 				this.training = new Training(result.getInt("id"), result.getString("name"), result.getDouble("price"), result.getString("description"));
@@ -197,7 +198,7 @@ public class TrainingDao implements IDao<Training> {
 					PreparedStatement ps = connection.prepareStatement(sql);
 					ps.setInt(1, this.getTraining().getId());
 					ps.setInt(1, category.getId());
-					ResultSet result = ps.executeQuery(sql);
+					ResultSet result = ps.executeQuery();
 					if(!result.next()) {
 						String sqlInsert = "INSERT INTO is_category (id_training, id_category) VALUES (?, ?)";
 						ps = connection.prepareStatement(sqlInsert);
@@ -246,9 +247,23 @@ public class TrainingDao implements IDao<Training> {
 	
 	public ArrayList<Training> search(String tags){
 		ArrayList<Training> recordsFound = new ArrayList<Training>();
-		
-		
-		
+		tags = tags.replace(" ", "%");
+		String sql = "SELECT id FROM training WHERE MATCH (name) AGAINST (?) OR MATCH (description) AGAINST (?)";
+		DBConnexion dbConnection = new DBConnexion();
+		try {
+			Connection connection = dbConnection.ConnectDB();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setString(1, tags);
+			ps.setString(2, tags);
+			ResultSet result = ps.executeQuery();
+			while(result.next()) {
+				this.training.setId(result.getInt("id"));
+				this.read();
+				recordsFound.add(this.getTraining());
+			}
+		}catch (SQLException e) {
+			e.printStackTrace();
+		}
 		return recordsFound;
 	}
 }

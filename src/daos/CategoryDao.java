@@ -86,7 +86,7 @@ public class CategoryDao implements IDao<Category> {
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);
 			ps.setInt(1, this.getCategory().getId());
-			result = ps.executeQuery(sql);
+			result = ps.executeQuery();
 			while(result.next()) {
 				this.category = new Category(result.getInt(("id")), result.getString(("name")));
 			}
@@ -109,7 +109,7 @@ public class CategoryDao implements IDao<Category> {
 		try {
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);
-			result = ps.executeQuery(sql);
+			result = ps.executeQuery();
 			while(result.next()) {
 				// Creating a new Category to avoid reference problems
 				this.category = new Category(result.getInt(("id")), result.getString(("name")));
@@ -136,7 +136,7 @@ public class CategoryDao implements IDao<Category> {
 //		try {
 //			Connection  connection = dbConnection.ConnectDB();
 //			PreparedStatement ps = connection.prepareStatement(sql);
-//			result = ps.executeQuery(sql);
+//			result = ps.executeQuery();
 //			while(result.next()) {
 //				// Creating a new Category to avoid reference problems
 //				this.category = new Category();
@@ -186,7 +186,7 @@ public class CategoryDao implements IDao<Category> {
 		try{
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);
-			ps.setInt(2, this.getCategory().getId());
+			ps.setInt(1, this.getCategory().getId());
 			if(ps.executeUpdate() == 1) {
 				return true;
 			}
