@@ -4,9 +4,12 @@
 package business;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import daos.CategoryDao;
+import daos.TrainingDao;
 import models.Category;
+import models.Training;
 
 /**
  * Class to use all class objects
@@ -72,23 +75,105 @@ public class TrainingStore {
 	 * 
 	 * @return
 	 */
-	public String displayMainMenu() {
+	public void displayMainMenu() {
 		String menu = "Menu principal : \n";
 		for(String option : this.getMainMenu()) {
 			menu += option + "\n";
 		}
-		return menu;
+		System.out.println(menu);
 	}
 	
 	/**
 	 * 
 	 * @return
 	 */
-	public String displayCategoriesMenu() {
+	public void displayCategoriesMenu() {
 		String menu = "Quelles catégories voulez-vous afficher ? : \n";
 		for(String option : this.getMainMenu()) {
 			menu += option + "\n";
 		}
-		return menu;
+		System.out.println(menu);
+	}
+	
+	/**
+	 * 
+	 * @param trainings
+	 */
+	public void displayTrainingList(ArrayList<Training> trainings) {
+		String columns = "| Id  ";
+		String spaces = "";
+		String line = "";
+		for(int i = 0; i < 187; i++) {
+			line += "-";
+		}
+		columns += "| Name";
+		for(int i = 0; i < 50 - " Name".length() ; i++) {
+			spaces += " ";
+		}
+		columns += spaces + "| Category";
+		spaces = "";
+		for(int i = 0; i < 25 - " Category".length() ; i++) {
+			spaces += " ";
+		}
+		columns += spaces + "| Price";
+		spaces = "";
+		for(int i = 0; i < 10 - " Price".length() ; i++) {
+			spaces += " ";
+		}
+		columns += spaces + "| Description";
+		spaces = "";
+		for(int i = 0; i < 100 - " Description".length() ; i++) {
+			spaces += " ";
+		}
+		
+		System.out.println(columns);
+		System.out.println(line);
+		for(Training training: trainings) {
+			System.out.println(training);
+		}
+		System.out.println(line);
+		
+	}
+	
+	public ArrayList<Training> getAllTrainings(){
+		ArrayList<Training> allTrainings = new ArrayList<Training>();
+		TrainingDao trainingDao = new TrainingDao();
+		allTrainings = new ArrayList<Training>(trainingDao.readAll());
+		return allTrainings;
+	}
+	
+	public void selectOption(String menu) {
+		Scanner scan = new Scanner(System.in);
+		int select = 0;
+		if(menu.equals("main")) {
+			try {
+				System.out.println("Veuillez saisir une option (entrez le numéro de l'option) : ");
+				select = scan.nextInt();
+				switch(select) {
+				case 1:
+					this.displayTrainingList(this.getAllTrainings());
+					break;
+				case 2:
+					this.displayCategoriesMenu();
+					break;
+				case 3:
+					break;
+				case 4:
+					System.exit(1);
+					break;
+				default:
+					this.displayMainMenu();
+					break;
+				}
+			}catch (Exception e) {
+				scan.close();
+				e.printStackTrace();
+			}
+		}else if(menu.equals("categories")) {
+			
+		}else {
+			this.displayMainMenu();
+		}
+		scan.close();
 	}
 }
