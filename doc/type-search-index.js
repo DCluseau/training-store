@@ -1,0 +1,1 @@
+typeSearchIndex = [{"l":"All Classes and Interfaces","u":"allclasses-index.html"},{"p":"models","l":"Category"},{"p":"daos","l":"CategoryDao"},{"p":"daos","l":"DBConnexion"},{"p":"daos","l":"IDao"},{"p":"<Unnamed>","l":"Main"},{"p":"models","l":"Training"},{"p":"daos","l":"TrainingDao"},{"p":"business","l":"TrainingStore"}];updateSearchResults();
