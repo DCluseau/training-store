@@ -103,7 +103,6 @@ public class TrainingDao implements IDao<Training> {
 	public ArrayList<Category> readCategories(){
 		ArrayList<Category> categories = new ArrayList<Category>();
 		ResultSet result = null;
-		
 		DBConnexion dbConnection = new DBConnexion();
 		String sql = "SELECT id_category FROM is_category WHERE id_training = ?";
 		try {
@@ -124,6 +123,31 @@ public class TrainingDao implements IDao<Training> {
 			e.printStackTrace();
 		}
 		return categories;
+	}
+	
+	public ArrayList<Training> readTrainingsByCategory(int id){
+		ArrayList<Training> trainings = new ArrayList<Training>();
+		ResultSet result = null;
+		DBConnexion dbConnection = new DBConnexion();
+		String sql = "SELECT id_training FROM is_category WHERE id_category = ?";
+		try {
+			Connection  connection = dbConnection.ConnectDB();
+			PreparedStatement ps = connection.prepareStatement(sql);
+			ps.setInt(1, id);
+			result = ps.executeQuery();
+			while(result.next()) {
+				// Creating a new object to avoid reference problems
+				Training training = new Training();
+				training.setId(result.getInt("id_training"));
+				TrainingDao trainingDao = new TrainingDao(training);
+				trainings.add(trainingDao.read());
+			}
+			ps.close();
+			connection.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return trainings;
 	}
 
 	/**
@@ -247,7 +271,7 @@ public class TrainingDao implements IDao<Training> {
 	
 	public ArrayList<Training> search(String tags){
 		ArrayList<Training> recordsFound = new ArrayList<Training>();
-		tags = tags.replace(" ", "%");
+		tags = tags.replace("+", "%");
 		String sql = "SELECT id FROM training WHERE MATCH (name) AGAINST (?) OR MATCH (description) AGAINST (?)";
 		DBConnexion dbConnection = new DBConnexion();
 		try {

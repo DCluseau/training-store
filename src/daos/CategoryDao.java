@@ -105,7 +105,7 @@ public class CategoryDao implements IDao<Category> {
 		ArrayList<Category> categories = new ArrayList<Category>();
 		ResultSet result = null;
 		DBConnexion dbConnection = new DBConnexion();
-		String sql = "SELECT * FROM category";
+		String sql = "SELECT * FROM category ORDER BY id ASC";
 		try {
 			Connection  connection = dbConnection.ConnectDB();
 			PreparedStatement ps = connection.prepareStatement(sql);

@@ -4,6 +4,9 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * Initialize database connexion configuration
+ */
 public class DBConnexion {
 	
 	  private String url;
@@ -33,6 +36,7 @@ public class DBConnexion {
 	}
 
 	/**
+	 * Get the url of the database
 	 * @return the url
 	 */
 	public String getUrl() {
@@ -40,6 +44,7 @@ public class DBConnexion {
 	}
 
 	/**
+	 * Set the url of the database
 	 * @param url the url to set
 	 */
 	public void setUrl(String url) {
@@ -47,6 +52,7 @@ public class DBConnexion {
 	}
 
 	/**
+	 * Get the login
 	 * @return the login
 	 */
 	public String getLogin() {
@@ -54,6 +60,7 @@ public class DBConnexion {
 	}
 
 	/**
+	 * Set the login
 	 * @param login the login to set
 	 */
 	public void setLogin(String login) {
@@ -61,6 +68,7 @@ public class DBConnexion {
 	}
 
 	/**
+	 * Set the new password
 	 * @param pwd the pwd to set
 	 */
 	public void setPwd(String pwd) {
@@ -68,7 +76,8 @@ public class DBConnexion {
 	}
 	
 	/**
-	 * @return the password
+	 * Get the password
+	 * @return the password to connect to the database
 	 */
 	public String getPwd() {
 		return this.pwd;
@@ -76,15 +85,13 @@ public class DBConnexion {
 
 	/**
 	 * Establish a connexion to the database specified in the url
-	 * @return
+	 * @return connection object
 	 */
 	public Connection ConnectDB() {
 		Connection connection = null;
 		try {
 			connection = DriverManager.getConnection(this.url, this.login, this.pwd);
-			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return connection;
