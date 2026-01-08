@@ -95,13 +95,14 @@ public class TrainingStore {
 		System.out.println(menu);
 	}
 	
-	public void displayTrainingsByCategories(int id) {
+	public void displayTrainingsByCategories() {
 		Scanner sc = new Scanner(System.in);
 		int numOption = 0;
 		try {
 			numOption = sc.nextInt();
 			TrainingDao trainingDao = new TrainingDao();
 			trainingDao.readTrainingsByCategory(numOption);
+			System.out.println(trainingDao);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -185,6 +186,7 @@ public class TrainingStore {
 						break;
 					case 2:
 						this.displayCategoriesMenu();
+						this.displayTrainingsByCategories();
 						break;
 					case 3:
 						String tags = "";
@@ -205,11 +207,10 @@ public class TrainingStore {
 				scan.close();
 				e.printStackTrace();
 			}
-		}else if(menu.equals("categories")) {
-			
+
+			scan.close();
 		}else {
 			this.displayMainMenu();
 		}
-		scan.close();
 	}
 }
