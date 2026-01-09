@@ -1,9 +1,9 @@
 # Training Store application
 
 ## Sommaire
-- But de l'application
-- Options disponibles
-- Manuel d'utilisation
+1. [But de l'application](#but-de-lapplication)
+2. [Options disponibles](#options-disponibles)
+3. [Manuel d'utilisation](#manuel-dutilisation)
 
 ## But de l'application
 
