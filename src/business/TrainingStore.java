@@ -95,19 +95,15 @@ public class TrainingStore {
 		System.out.println(menu);
 	}
 	
-	public void displayTrainingsByCategories() {
-		Scanner sc = new Scanner(System.in);
-		int numOption = 0;
+	public void displayTrainingsByCategories(int id) {
+		ArrayList<Training> trainings = new ArrayList<Training>();
 		try {
-			numOption = sc.nextInt();
 			TrainingDao trainingDao = new TrainingDao();
-			trainingDao.readTrainingsByCategory(numOption);
-			System.out.println(trainingDao);
+			trainings = trainingDao.readTrainingsByCategory(id);
+			this.displayTrainingList(trainings);
 		}catch (Exception e) {
 			e.printStackTrace();
 		}
-		sc.close();
-		
 	}
 	
 	/**
@@ -186,7 +182,8 @@ public class TrainingStore {
 						break;
 					case 2:
 						this.displayCategoriesMenu();
-						this.displayTrainingsByCategories();
+						select = scan.nextInt();
+						this.displayTrainingsByCategories(select);
 						break;
 					case 3:
 						String tags = "";
@@ -195,6 +192,7 @@ public class TrainingStore {
 						this.searchTrainings(tags);
 						break;
 					case 4:
+						System.out.println("Goodbye Stranger !");
 						System.exit(1);
 						break;
 					default:
